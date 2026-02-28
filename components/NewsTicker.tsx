@@ -13,21 +13,37 @@ const EVENT_TYPE_EMOJI: Record<string, string> = {
     zabita: '👮', guild: '⚔️', monopoly: '👑', ilan: '📋',
 };
 
+const BACKGROUND_NEWS = [
+    "NEXUS AĞI BAŞARIYLA BAŞLATILDI...",
+    "MONAD BLOCKCHAIN GECİKME SÜRESİ 1MS ALTINDA...",
+    "MERKEZ BANKASI FAİZ KARARINI AÇIKLADI: DEĞİŞİKLİK YOK...",
+    "SİBER GÜVENLİK UZMANLARINDAN YENİ YAZILIM UYARISI...",
+    "BORSADA İŞLEM HACMİ TÜM ZAMANLARIN ZİRVESİNDE...",
+    "YENİ TİCARET YOLLARI İÇİN GÖRÜŞMELER BAŞLADI...",
+    "YAPAY ZEKA TÜCCARLARI PİYASAYI DOMİNE EDİYOR...",
+    "OTONOM TESLİMAT DRONLARI HİZMETE GİRDİ...",
+    "ENERJİ FİYATLARINDAKİ DÜŞÜŞ ÜRETİMİ HIZLANDIRDI...",
+    "VERİ MERKEZLERİ KAPASİTE ARTIRIMINA GİDİYOR..."
+];
+
 export default function NewsTicker({ events }: NewsTickerProps) {
-    // We stabilize the list to exactly 10 items to prevent width jumps
-    // when simulation events change size/count.
+    // Stabilize the list to exactly 40 items to prevent width jumps
+    // padding with realistic background news.
     const tickerItems = useMemo(() => {
-        const slice = events.slice(0, 10);
-        // Pad with dummy items if empty
-        while (slice.length < 10) {
+        const slice = [...events].slice(0, 40);
+
+        let dummyCounter = 0;
+        // Pad with realistic background news if empty or less than 40
+        while (slice.length < 40) {
             slice.push({
-                id: `dummy-${slice.length}`,
-                headline: "NEXUS LIVE NETWORK STATUS: OPTIMAL",
+                id: `bg-${dummyCounter}`,
+                headline: BACKGROUND_NEWS[dummyCounter % BACKGROUND_NEWS.length],
                 type: 'trade',
                 timestamp: 0,
                 description: "",
                 agentIds: []
             });
+            dummyCounter++;
         }
         return [...slice, ...slice];
     }, [events]);
@@ -38,7 +54,7 @@ export default function NewsTicker({ events }: NewsTickerProps) {
                 initial={{ x: 0 }}
                 animate={{ x: "-50%" }}
                 transition={{
-                    duration: 80,
+                    duration: 200, // Very slow, seamless presentation flow
                     ease: "linear",
                     repeat: Infinity
                 }}
@@ -46,7 +62,7 @@ export default function NewsTicker({ events }: NewsTickerProps) {
             >
                 {tickerItems.map((ev, i) => (
                     <div
-                        key={`${ev.id}-${i}`}
+                        key={i} // Using index to prevent unmounting/remounting DOM nodes (eliminates micro-stutters)
                         className="flex items-center gap-3 px-8 border-r border-black/10 min-w-[400px] max-w-[400px]"
                     >
                         <span className="text-2xl shrink-0">{EVENT_TYPE_EMOJI[ev.type] || '📌'}</span>
