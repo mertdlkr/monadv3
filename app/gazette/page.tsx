@@ -14,18 +14,19 @@ const EVENT_TYPE_CONFIG: Record<EventType, { label: string; colorClass: string; 
     guild: { label: 'İTTİFAK', colorClass: 'text-vtg-accent-green', icon: 'handshake' },
     monopoly: { label: 'TEKEL', colorClass: 'text-orange-800', icon: 'crown' },
     ilan: { label: 'İLAN', colorClass: 'text-slate-600', icon: 'campaign' },
+    fight: { label: 'MEYDAN KAVGASI', colorClass: 'text-vtg-accent-red', icon: 'sports_mma' },
 };
 
 export default function GazettePage() {
     const sim = useSimContext();
 
     const topAgents = [...sim.agents]
-        .filter(a => a.status === 'active')
+        .filter(a => !a.isBankrupt)
         .sort((a, b) => b.wealth - a.wealth)
         .slice(0, 5);
 
     const bankruptAgents = sim.agents
-        .filter(a => a.status === 'bankrupt')
+        .filter(a => a.isBankrupt)
         .slice(0, 5);
 
     const maxWealth = topAgents[0]?.wealth || 1;
@@ -95,7 +96,7 @@ export default function GazettePage() {
                                             {sim.events[0].headline}
                                         </h2>
                                         <div className="flex items-center gap-3 text-paper/80 text-sm font-medium">
-                                            <span className="flex items-center gap-1"><span className="material-symbols-outlined text-sm">schedule</span> Tick {sim.events[0].timestamp}</span>
+                                            <span className="flex items-center gap-1"><span className="material-symbols-outlined text-sm">schedule</span> Tick {String(sim.events[0].timestamp)}</span>
                                             <span>•</span>
                                             <span>Yazar: Otomat-7</span>
                                         </div>
@@ -115,7 +116,7 @@ export default function GazettePage() {
                                     <article key={idx} className="flex flex-col gap-3 bg-vtg-sepia-light p-4 border border-vtg-sepia-dark rounded-sm vintage-box-shadow hover:bg-vtg-sepia-dark/50 transition-colors cursor-pointer">
                                         <div className="flex justify-between items-start">
                                             <span className={`${config.colorClass} font-bold text-xs tracking-widest uppercase border-b border-current pb-0.5`}>{config.label}</span>
-                                            <span className="text-ink/50 text-xs italic">Tick {evt.timestamp}</span>
+                                            <span className="text-ink/50 text-xs italic">Tick {String(evt.timestamp)}</span>
                                         </div>
                                         <h3 className="text-xl font-headline font-bold text-ink leading-tight">{evt.headline}</h3>
                                         <p className="text-sm text-ink/80 line-clamp-3">

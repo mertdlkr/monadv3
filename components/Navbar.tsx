@@ -6,9 +6,11 @@ import Image from 'next/image';
 import { useState } from 'react';
 
 const NAV_LINKS = [
-    { href: '/market', label: 'Nexus Haritası' },
+    { href: '/market', label: 'Pazar Yeri' },
+    { href: '/nexus-map', label: 'Nexus Haritası' },
     { href: '/gazette', label: 'Gazete' },
     { href: '/ilan', label: 'İlan Hanı' },
+    { href: '/sunum', label: 'Sunum' },
 ];
 
 export default function Navbar() {

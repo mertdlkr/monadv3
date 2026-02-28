@@ -10,7 +10,7 @@ import { useSimulation } from '@/lib/useSimulation';
 const SimulationContext = createContext<SimulationState | null>(null);
 
 export function SimulationProvider({ children }: { children: React.ReactNode }) {
-    const sim = useSimulation(3000);
+    const sim = useSimulation(2500);
     return (
         <SimulationContext.Provider value={sim}>
             {children}

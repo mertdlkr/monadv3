@@ -12,15 +12,29 @@ import {
 
 const EVENT_TYPE_EMOJI: Record<string, string> = {
     trade: '💰', scam: '🚨', cartel: '🤝', bankruptcy: '💀',
-    zabita: '👮', guild: '⚔️', monopoly: '👑', ilan: '📋',
+    zabita: '👮', guild: '⚔️', monopoly: '👑', ilan: '📋', fight: '🥊'
 };
+
+function getGiniColor(gini: number): string {
+    if (gini < 0.3) return '#00ff88';
+    if (gini < 0.45) return '#ffd700';
+    if (gini < 0.6) return '#ff6b35';
+    return '#ff2d55';
+}
+
+function getGiniLabel(gini: number): string {
+    if (gini < 0.3) return 'NORMAL';
+    if (gini < 0.45) return 'DİKKAT';
+    if (gini < 0.6) return 'TEHLİKE';
+    return 'OLİGARŞİ ⚠️';
+}
 
 import NewsTicker from '@/components/NewsTicker';
 
 export default function HomePage() {
     const sim = useSimContext();
 
-    const giniData = sim.giniHistory.map((g, i) => ({ tick: i, gini: Number(g.toFixed(3)) }));
+    const giniData = sim.giniHistory.map((g) => ({ tick: g.tick, gini: Number(g.value.toFixed(3)) }));
 
     const featureCards = [
         {
@@ -90,7 +104,7 @@ export default function HomePage() {
                             <div className="absolute inset-0 bg-gradient-to-t from-nexus-bg via-transparent to-transparent" />
                             <div className="relative z-10 flex flex-col items-center mt-auto pb-4">
                                 <p className="font-terminal text-2xl text-nexus-primary animate-pulse">
-                                    {sim.agents.filter(a => a.status === 'active').length} agent aktif
+                                    {sim.agents.filter(a => !a.isBankrupt).length} agent aktif
                                 </p>
                             </div>
                             {/* Decorative borders */}
@@ -111,7 +125,7 @@ export default function HomePage() {
                             <span className="material-symbols-outlined text-nexus-primary">smart_toy</span>
                         </div>
                         <p className="text-3xl font-pixel text-white mt-1">
-                            {sim.agents.filter(a => a.status === 'active').length}{' '}
+                            {sim.agents.filter(a => !a.isBankrupt).length}{' '}
                             <span className="text-sm align-middle text-nexus-primary">Tüccar</span>
                         </p>
                     </div>
@@ -119,38 +133,38 @@ export default function HomePage() {
                     {/* Card 2: Throughput */}
                     <div className="bg-nexus-card border-2 border-nexus-primary p-6 rounded-lg pixel-shadow transition-all">
                         <div className="flex justify-between items-start mb-2">
-                            <p className="font-terminal text-xl text-slate-400">Ağ Hızı</p>
-                            <span className="material-symbols-outlined text-nexus-primary">bolt</span>
+                            <p className="font-terminal text-xl text-slate-400">İşlem Hacmi</p>
+                            <span className="material-symbols-outlined text-nexus-primary">swap_horiz</span>
                         </div>
                         <p className="text-3xl font-pixel text-nexus-gold mt-1">
-                            ~{Math.floor(sim.totalTrades / Math.max(1, sim.tick) * 10)}{' '}
-                            <span className="text-sm align-middle text-slate-400">İşlem/Blok</span>
+                            {sim.totalTrades}{' '}
+                            <span className="text-sm align-middle text-slate-400">İşlem</span>
                         </p>
                     </div>
 
                     {/* Card 3: Gini */}
-                    <div className="bg-nexus-card border-2 border-nexus-primary p-6 rounded-lg pixel-shadow transition-all">
+                    <div className="bg-nexus-card border-2 p-6 rounded-lg pixel-shadow transition-all" style={{ borderColor: getGiniColor(sim.currentGini) }}>
                         <div className="flex justify-between items-start mb-2">
                             <p className="font-terminal text-xl text-slate-400">Gini Katsayısı</p>
-                            <span className="material-symbols-outlined text-nexus-alert">trending_up</span>
+                            <span className="material-symbols-outlined" style={{ color: getGiniColor(sim.currentGini) }}>trending_up</span>
                         </div>
-                        <p className="text-3xl font-pixel text-nexus-alert mt-1">
+                        <p className="text-3xl font-pixel mt-1" style={{ color: getGiniColor(sim.currentGini) }}>
                             {sim.currentGini.toFixed(2)}{' '}
-                            <span className="text-sm align-middle text-slate-400">
-                                {sim.currentGini > 0.5 ? 'YÜKSEK EŞİTSİZLİK' : 'NORMAL'}
+                            <span className="text-[10px] align-middle text-slate-400 ml-1">
+                                {getGiniLabel(sim.currentGini)}
                             </span>
                         </p>
                     </div>
 
                     {/* Card 4: Bankruptcies */}
-                    <div className="bg-nexus-card border-2 border-nexus-primary p-6 rounded-lg pixel-shadow transition-all">
+                    <div className="bg-nexus-card border-2 border-slate-700 p-6 rounded-lg pixel-shadow transition-all">
                         <div className="flex justify-between items-start mb-2">
                             <p className="font-terminal text-xl text-slate-400">Batan Dükkanlar</p>
                             <span className="material-symbols-outlined text-slate-500">skull</span>
                         </div>
-                        <p className="text-3xl font-pixel text-slate-200 mt-1">
+                        <p className="text-3xl font-pixel text-[#ff2d55] mt-1">
                             {sim.totalBankruptcies}{' '}
-                            <span className="text-sm align-middle text-slate-400">İflas 💀</span>
+                            <span className="text-sm align-middle text-slate-500">İflas 💀</span>
                         </p>
                     </div>
                 </div>
@@ -201,6 +215,13 @@ export default function HomePage() {
                             <div className="flex-grow min-h-[300px]">
                                 <ResponsiveContainer width="100%" height="100%">
                                     <LineChart data={giniData}>
+                                        <defs>
+                                            <linearGradient id="giniGradient" x1="0" y1="0" x2="0" y2="1">
+                                                <stop offset="0%" stopColor="#ff2d55" />
+                                                <stop offset="41%" stopColor="#ff6b35" />
+                                                <stop offset="100%" stopColor="#00ff88" />
+                                            </linearGradient>
+                                        </defs>
                                         <CartesianGrid strokeDasharray="3 3" stroke="#1e1e3a" />
                                         <XAxis dataKey="tick" stroke="#4a4a6a" tick={{ fontSize: 10 }} />
                                         <YAxis domain={[0, 1]} stroke="#4a4a6a" tick={{ fontSize: 10 }} />
@@ -212,13 +233,13 @@ export default function HomePage() {
                                                 color: '#e0e0e0',
                                             }}
                                         />
-                                        <ReferenceLine y={0.41} stroke="#3b82f6" strokeDasharray="3 3" label={{ value: 'TR: 0.41', fill: '#3b82f6', fontSize: 10 }} />
-                                        <ReferenceLine y={0.48} stroke="#f59e0b" strokeDasharray="3 3" label={{ value: 'ABD: 0.48', fill: '#f59e0b', fontSize: 10 }} />
+                                        <ReferenceLine y={0.41} stroke="#ffd700" strokeDasharray="5 5" label={{ value: 'TR: 0.41', fill: '#ffd700', fontSize: 10, position: 'insideTopLeft' }} />
+                                        <ReferenceLine y={0.48} stroke="#ff6b35" strokeDasharray="5 5" label={{ value: 'ABD: 0.48', fill: '#ff6b35', fontSize: 10, position: 'insideTopLeft' }} />
                                         <Line
                                             type="monotone"
                                             dataKey="gini"
-                                            stroke="#00ff88"
-                                            strokeWidth={2}
+                                            stroke="url(#giniGradient)"
+                                            strokeWidth={3}
                                             dot={false}
                                             activeDot={{ r: 4, fill: '#00ff88' }}
                                         />

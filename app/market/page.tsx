@@ -21,7 +21,7 @@ function AgentModal({ agent, onClose }: { agent: Agent; onClose: () => void }) {
                         </div>
                         <div>
                             <h2 className="text-2xl font-bold text-white">{agent.name}</h2>
-                            <p className="text-nexus-primary font-terminal text-lg">{SHOP_LABELS[agent.shopType]}</p>
+                            <p className="text-nexus-primary font-terminal text-lg">{SHOP_LABELS[agent.shopType as keyof typeof SHOP_LABELS]}</p>
                         </div>
                     </div>
                     <button onClick={onClose} className="text-slate-400 hover:text-white">
@@ -36,7 +36,7 @@ function AgentModal({ agent, onClose }: { agent: Agent; onClose: () => void }) {
                     </div>
                     <div className="bg-nexus-bg p-3 rounded-lg">
                         <p className="text-xs text-slate-400 uppercase">Rol</p>
-                        <p className="text-xl font-bold text-white">{ROLE_LABELS[agent.role]}</p>
+                        <p className="text-xl font-bold text-white">{ROLE_LABELS[agent.role as keyof typeof ROLE_LABELS]}</p>
                     </div>
                     <div className="bg-nexus-bg p-3 rounded-lg">
                         <p className="text-xs text-slate-400 uppercase">İtibar</p>
@@ -93,22 +93,22 @@ function AgentModal({ agent, onClose }: { agent: Agent; onClose: () => void }) {
 
                 {/* Status */}
                 <div className="mt-4 flex items-center gap-2">
-                    {agent.status === 'active' && (
+                    {!agent.isBankrupt && (
                         <span className="flex items-center gap-2 text-xs text-green-400 bg-green-900/20 px-3 py-1.5 rounded">
                             <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
                             Dükkan Açık
                         </span>
                     )}
-                    {agent.status === 'bankrupt' && (
+                    {agent.isBankrupt && (
                         <span className="flex items-center gap-2 text-xs text-red-400 bg-red-900/20 px-3 py-1.5 rounded">
                             <span className="w-1.5 h-1.5 rounded-full bg-red-500" />
                             İflas
                         </span>
                     )}
-                    {agent.status === 'investigation' && (
-                        <span className="flex items-center gap-2 text-xs text-yellow-500 bg-yellow-900/20 px-3 py-1.5 rounded">
-                            <span className="material-symbols-outlined text-sm">gavel</span>
-                            Soruşturmada
+                    {agent.role === 'trickster' && !agent.isBankrupt && (
+                        <span className="flex items-center gap-2 text-purple-400 bg-purple-900/20 px-3 py-1.5 rounded">
+                            <span className="material-symbols-outlined text-sm">masks</span>
+                            Karanlık İşler
                         </span>
                     )}
                 </div>
@@ -117,7 +117,7 @@ function AgentModal({ agent, onClose }: { agent: Agent; onClose: () => void }) {
     );
 }
 
-type FilterType = 'all' | 'richest' | 'bankrupt' | 'investigation' | 'aga';
+type FilterType = 'all' | 'richest' | 'bankrupt' | 'trickster' | 'aga';
 
 export default function MarketPage() {
     const sim = useSimContext();
@@ -126,10 +126,10 @@ export default function MarketPage() {
 
     const filteredAgents = sim.agents.filter(a => {
         if (filter === 'all') return true;
-        if (filter === 'richest') return a.wealth > 2000;
-        if (filter === 'bankrupt') return a.status === 'bankrupt';
-        if (filter === 'investigation') return a.status === 'investigation';
-        if (filter === 'aga') return a.role === 'aga';
+        if (filter === 'richest') return a.wealth > 1500;
+        if (filter === 'bankrupt') return a.isBankrupt;
+        if (filter === 'trickster') return a.role === 'trickster';
+        if (filter === 'aga') return a.avatar.includes('crab_boss');
         return true;
     }).sort((a, b) => {
         if (filter === 'richest') return b.wealth - a.wealth;
@@ -140,7 +140,7 @@ export default function MarketPage() {
         { key: 'all', label: 'Tümü' },
         { key: 'richest', label: 'En Zengin', icon: 'attach_money' },
         { key: 'bankrupt', label: 'İflas', icon: 'trending_down' },
-        { key: 'investigation', label: 'Zabıta Baskını', icon: 'local_police' },
+        { key: 'trickster', label: 'Kalpazanlar', icon: 'local_police' },
         { key: 'aga', label: 'Nexus Ağası', icon: 'diamond' },
     ];
 
@@ -154,7 +154,7 @@ export default function MarketPage() {
                         50 Dükkan, <span className="text-nexus-primary">Sınırsız Drama</span>
                     </h2>
                     <p className="text-lg text-slate-400 max-w-2xl">
-                        Büyük Nexus&apos;un nabzını tutun. Kim zengin oldu, kim iflas etti, kime zabıta baskını yapıldı?
+                        Büyük Nexus&apos;un nabzını tutun. Kim zengin oldu, kim iflas etti, kim karanlık işler çeviriyor?
                     </p>
                 </div>
 
@@ -181,24 +181,24 @@ export default function MarketPage() {
                         <div
                             key={agent.id}
                             onClick={() => setSelectedAgent(agent)}
-                            className={`group relative rounded-xl overflow-hidden cursor-pointer transition-all duration-300 hover:-translate-y-1 ${agent.status === 'bankrupt'
+                            className={`group relative rounded-xl overflow-hidden cursor-pointer transition-all duration-300 hover:-translate-y-1 ${agent.isBankrupt
                                 ? 'bg-nexus-card border border-red-900/50 opacity-75 hover:opacity-100'
-                                : agent.role === 'aga'
+                                : agent.avatar.includes('crab_boss')
                                     ? 'bg-nexus-card border-2 border-nexus-gold shadow-[0_0_20px_rgba(255,215,0,0.15)]'
-                                    : agent.status === 'investigation'
-                                        ? 'bg-nexus-card border border-yellow-600/50'
+                                    : agent.role === 'trickster'
+                                        ? 'bg-nexus-card border border-purple-600/50'
                                         : 'bg-nexus-card border border-white/5 hover:border-nexus-primary/50'
                                 }`}
                         >
                             {/* Aga Badge */}
-                            {agent.role === 'aga' && (
+                            {agent.avatar.includes('crab_boss') && !agent.isBankrupt && (
                                 <div className="absolute top-0 right-0 bg-nexus-gold text-nexus-bg text-xs font-bold px-3 py-1 rounded-bl-lg z-10">
                                     👑 NEXUS AĞASI
                                 </div>
                             )}
 
                             {/* Bankrupt overlay */}
-                            {agent.status === 'bankrupt' && (
+                            {agent.isBankrupt && (
                                 <div className="absolute inset-0 bg-red-900/20 pointer-events-none z-10 flex items-center justify-center">
                                     <div className="border-4 border-red-600 text-red-600 font-black text-2xl -rotate-12 px-4 py-2 uppercase tracking-widest opacity-80">
                                         İFLAS
@@ -206,9 +206,9 @@ export default function MarketPage() {
                                 </div>
                             )}
 
-                            {/* Investigation tape */}
-                            {agent.status === 'investigation' && (
-                                <div className="absolute top-8 -left-10 w-[150%] h-6 police-tape z-20 rotate-[-15deg] shadow-lg" />
+                            {/* Info tape */}
+                            {agent.role === 'trickster' && !agent.isBankrupt && (
+                                <div className="absolute top-8 -left-10 w-[150%] h-6 police-tape z-20 rotate-[-15deg] shadow-lg opacity-80 mix-blend-color-dodge" />
                             )}
 
                             {/* Avatar */}
@@ -217,7 +217,7 @@ export default function MarketPage() {
                                     src={agent.avatar}
                                     alt={agent.name}
                                     fill
-                                    className={`object-contain p-4 transition-all duration-500 ${agent.status === 'bankrupt' ? 'grayscale' : 'grayscale group-hover:grayscale-0'
+                                    className={`object-contain p-4 transition-all duration-500 ${agent.isBankrupt ? 'grayscale' : 'grayscale group-hover:grayscale-0'
                                         }`}
                                 />
                                 <div className="absolute inset-0 bg-gradient-to-t from-nexus-card via-transparent to-transparent opacity-80" />
@@ -226,26 +226,26 @@ export default function MarketPage() {
                             {/* Info */}
                             <div className="p-5 relative -mt-12">
                                 <div className="flex justify-between items-end mb-2">
-                                    <h3 className={`text-lg font-bold transition-colors ${agent.status === 'bankrupt' ? 'text-red-200 line-through decoration-red-500' : 'text-white group-hover:text-nexus-primary'
+                                    <h3 className={`text-lg font-bold transition-colors ${agent.isBankrupt ? 'text-red-200 line-through decoration-red-500' : 'text-white group-hover:text-nexus-primary'
                                         }`}>
-                                        {agent.name} — {SHOP_LABELS[agent.shopType]}
+                                        {agent.name} — {SHOP_LABELS[agent.shopType as keyof typeof SHOP_LABELS]}
                                     </h3>
-                                    <div className={`px-2 py-0.5 rounded text-xs font-medium uppercase tracking-wider border ${agent.role === 'aga' ? 'bg-nexus-gold/20 text-nexus-gold border-nexus-gold/30' :
-                                        agent.status === 'bankrupt' ? 'bg-red-900/30 text-red-400 border-red-900/50' :
-                                            agent.role === 'kalpazan' ? 'bg-purple-900/30 text-purple-400 border-purple-900/50' :
+                                    <div className={`px-2 py-0.5 rounded text-xs font-medium uppercase tracking-wider border ${agent.avatar.includes('crab_boss') ? 'bg-nexus-gold/20 text-nexus-gold border-nexus-gold/30' :
+                                        agent.isBankrupt ? 'bg-red-900/30 text-red-400 border-red-900/50' :
+                                            agent.role === 'trickster' ? 'bg-purple-900/30 text-purple-400 border-purple-900/50' :
                                                 'bg-white/10 text-slate-400 border-white/5'
                                         }`}>
-                                        {ROLE_LABELS[agent.role]}
+                                        {ROLE_LABELS[agent.role as keyof typeof ROLE_LABELS]}
                                     </div>
                                 </div>
 
                                 <div className="space-y-3">
                                     <div className="flex items-center justify-between text-sm">
                                         <span className="text-slate-400">Servet</span>
-                                        <span className={`font-mono font-bold ${agent.status === 'bankrupt' ? 'text-red-500' :
-                                            agent.role === 'aga' ? 'text-nexus-gold text-lg' : 'text-white'
+                                        <span className={`font-mono font-bold ${agent.isBankrupt ? 'text-red-500' :
+                                            agent.avatar.includes('crab_boss') ? 'text-nexus-gold text-lg' : 'text-white'
                                             }`}>
-                                            {agent.wealth.toLocaleString()} MON
+                                            {Math.round(agent.wealth).toLocaleString()} MON
                                         </span>
                                     </div>
 
@@ -256,7 +256,7 @@ export default function MarketPage() {
                                                 <span
                                                     key={s}
                                                     className={`material-symbols-outlined text-[16px] ${s <= Math.round(agent.reputation)
-                                                        ? agent.status === 'bankrupt' ? 'text-red-500/50' : 'text-nexus-gold/80'
+                                                        ? agent.isBankrupt ? 'text-red-500/50' : 'text-nexus-gold/80'
                                                         : 'text-white/20'
                                                         }`}
                                                 >
@@ -269,22 +269,22 @@ export default function MarketPage() {
 
                                     {/* Status Badge */}
                                     <div className="flex items-center gap-2 text-xs">
-                                        {agent.status === 'active' && (
+                                        {!agent.isBankrupt && (
                                             <span className="flex items-center gap-2 text-green-400 bg-green-900/20 px-2 py-1.5 rounded">
                                                 <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
                                                 Dükkan Açık
                                             </span>
                                         )}
-                                        {agent.status === 'bankrupt' && (
+                                        {agent.isBankrupt && (
                                             <span className="flex items-center gap-2 text-red-400 bg-red-900/20 px-2 py-1.5 rounded">
                                                 <span className="w-1.5 h-1.5 rounded-full bg-red-500" />
                                                 İflas
                                             </span>
                                         )}
-                                        {agent.status === 'investigation' && (
-                                            <span className="flex items-center gap-2 text-yellow-500 bg-yellow-900/20 px-2 py-1.5 rounded">
-                                                <span className="material-symbols-outlined text-sm">gavel</span>
-                                                Soruşturmada
+                                        {agent.role === 'trickster' && !agent.isBankrupt && (
+                                            <span className="flex items-center gap-2 text-purple-400 bg-purple-900/20 px-2 py-1.5 rounded">
+                                                <span className="material-symbols-outlined text-sm">masks</span>
+                                                Karanlık İşler
                                             </span>
                                         )}
                                     </div>
