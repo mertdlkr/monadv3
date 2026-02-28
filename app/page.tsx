@@ -61,17 +61,17 @@ export default function HomePage() {
                             NEXUS
                         </h1>
                         <h2 className="text-2xl md:text-3xl font-grotesk font-light text-slate-200">
-                            The First AI Economy
+                            İlk Yapay Zeka Ekonomisi
                         </h2>
                         <p className="text-lg text-slate-400 italic border-l-4 border-nexus-primary/50 pl-4 py-1">
-                            &quot;We gave agents money, a market, and freedom. Then we watched.&quot;
+                            &quot;Ajanlara para, piyasa ve özgürlük verdik. Sonra sadece izledik.&quot;
                         </p>
                         <div className="flex flex-wrap gap-4 pt-4">
                             <Link
                                 href="/market"
                                 className="flex items-center justify-center gap-2 bg-nexus-primary text-black font-bold font-pixel text-xs px-8 py-4 rounded hover:bg-white hover:shadow-neon transition-all duration-300"
                             >
-                                ENTER SIMULATION
+                                SİMÜLASYONA GİRİŞ
                                 <span className="material-symbols-outlined">login</span>
                             </Link>
                         </div>
@@ -107,7 +107,7 @@ export default function HomePage() {
                     {/* Card 1: Active Agents */}
                     <div className="bg-nexus-card border-2 border-nexus-primary p-6 rounded-lg pixel-shadow transition-all">
                         <div className="flex justify-between items-start mb-2">
-                            <p className="font-terminal text-xl text-slate-400">Active Agents</p>
+                            <p className="font-terminal text-xl text-slate-400">Aktif Ajanlar</p>
                             <span className="material-symbols-outlined text-nexus-primary">smart_toy</span>
                         </div>
                         <p className="text-3xl font-pixel text-white mt-1">
@@ -119,7 +119,7 @@ export default function HomePage() {
                     {/* Card 2: Throughput */}
                     <div className="bg-nexus-card border-2 border-nexus-primary p-6 rounded-lg pixel-shadow transition-all">
                         <div className="flex justify-between items-start mb-2">
-                            <p className="font-terminal text-xl text-slate-400">Throughput</p>
+                            <p className="font-terminal text-xl text-slate-400">Ağ Hızı</p>
                             <span className="material-symbols-outlined text-nexus-primary">bolt</span>
                         </div>
                         <p className="text-3xl font-pixel text-nexus-gold mt-1">
@@ -131,13 +131,13 @@ export default function HomePage() {
                     {/* Card 3: Gini */}
                     <div className="bg-nexus-card border-2 border-nexus-primary p-6 rounded-lg pixel-shadow transition-all">
                         <div className="flex justify-between items-start mb-2">
-                            <p className="font-terminal text-xl text-slate-400">Gini Coeff</p>
+                            <p className="font-terminal text-xl text-slate-400">Gini Katsayısı</p>
                             <span className="material-symbols-outlined text-nexus-alert">trending_up</span>
                         </div>
                         <p className="text-3xl font-pixel text-nexus-alert mt-1">
                             {sim.currentGini.toFixed(2)}{' '}
                             <span className="text-sm align-middle text-slate-400">
-                                {sim.currentGini > 0.5 ? 'HIGH' : 'MODERATE'}
+                                {sim.currentGini > 0.5 ? 'YÜKSEK EŞİTSİZLİK' : 'NORMAL'}
                             </span>
                         </p>
                     </div>
@@ -145,7 +145,7 @@ export default function HomePage() {
                     {/* Card 4: Bankruptcies */}
                     <div className="bg-nexus-card border-2 border-nexus-primary p-6 rounded-lg pixel-shadow transition-all">
                         <div className="flex justify-between items-start mb-2">
-                            <p className="font-terminal text-xl text-slate-400">Total Failures</p>
+                            <p className="font-terminal text-xl text-slate-400">Batan Dükkanlar</p>
                             <span className="material-symbols-outlined text-slate-500">skull</span>
                         </div>
                         <p className="text-3xl font-pixel text-slate-200 mt-1">
@@ -161,7 +161,7 @@ export default function HomePage() {
                     <div className="flex flex-col gap-6">
                         <h3 className="text-2xl font-pixel text-white mb-2 flex items-center gap-2">
                             <span className="material-symbols-outlined text-nexus-primary">category</span>
-                            LOCATIONS
+                            MEKANLAR
                         </h3>
                         {featureCards.map(card => (
                             <Link
@@ -189,13 +189,13 @@ export default function HomePage() {
                     <div className="lg:col-span-2 flex flex-col">
                         <h3 className="text-2xl font-pixel text-white mb-4 flex items-center gap-2">
                             <span className="material-symbols-outlined text-nexus-primary">ssid_chart</span>
-                            WEALTH INEQUALITY
+                            SERVET EŞİTSİZLİĞİ
                         </h3>
                         <div className="bg-nexus-card border border-slate-700 rounded-xl p-6 flex-grow flex flex-col relative overflow-hidden">
                             <div className="flex justify-between items-center mb-4">
-                                <h4 className="text-lg font-terminal text-slate-300">Servet Eşitsizliği — Canlı</h4>
+                                <h4 className="text-lg font-terminal text-slate-300">Gini Eğrisi — Canlı</h4>
                                 <div className="flex gap-2">
-                                    <span className="px-2 py-1 text-xs bg-nexus-primary text-black rounded font-bold">LIVE</span>
+                                    <span className="px-2 py-1 text-xs bg-nexus-primary text-black rounded font-bold">CANLI</span>
                                 </div>
                             </div>
                             <div className="flex-grow min-h-[300px]">
@@ -213,7 +213,7 @@ export default function HomePage() {
                                             }}
                                         />
                                         <ReferenceLine y={0.41} stroke="#3b82f6" strokeDasharray="3 3" label={{ value: 'TR: 0.41', fill: '#3b82f6', fontSize: 10 }} />
-                                        <ReferenceLine y={0.48} stroke="#f59e0b" strokeDasharray="3 3" label={{ value: 'USA: 0.48', fill: '#f59e0b', fontSize: 10 }} />
+                                        <ReferenceLine y={0.48} stroke="#f59e0b" strokeDasharray="3 3" label={{ value: 'ABD: 0.48', fill: '#f59e0b', fontSize: 10 }} />
                                         <Line
                                             type="monotone"
                                             dataKey="gini"
@@ -235,12 +235,12 @@ export default function HomePage() {
                         Pazarlık başlasın. 🦀
                     </p>
                     <div className="flex justify-center gap-4 text-slate-600 text-sm">
-                        <span>Block Height: #{8932102 + sim.tick}</span>
+                        <span>Blok Yüksekliği: #{8932102 + sim.tick}</span>
                         <span>|</span>
                         <span>Tick: {sim.tick}</span>
                         <span>|</span>
                         <span className="flex items-center gap-1">
-                            Powered by
+                            Altyapı:
                             <span className="text-purple-400 font-bold">MONAD</span>
                         </span>
                     </div>

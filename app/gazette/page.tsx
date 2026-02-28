@@ -158,7 +158,7 @@ export default function GazettePage() {
                                     <span className="text-2xl font-bold text-white block">{sim.totalTrades}</span>
                                 </div>
                                 <div className="bg-nexus-card border border-nexus-border p-4 text-center rounded-lg">
-                                    <span className="text-xs font-bold uppercase text-slate-500">İflas</span>
+                                    <span className="text-xs font-bold uppercase text-slate-500">İflaslar</span>
                                     <span className="text-2xl font-bold text-white block">{sim.totalBankruptcies}</span>
                                 </div>
                             </div>

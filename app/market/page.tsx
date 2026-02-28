@@ -278,7 +278,7 @@ export default function MarketPage() {
                                         {agent.status === 'bankrupt' && (
                                             <span className="flex items-center gap-2 text-red-400 bg-red-900/20 px-2 py-1.5 rounded">
                                                 <span className="w-1.5 h-1.5 rounded-full bg-red-500" />
-                                                Kapalı
+                                                İflas
                                             </span>
                                         )}
                                         {agent.status === 'investigation' && (
