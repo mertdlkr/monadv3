@@ -15,6 +15,8 @@ const EVENT_TYPE_EMOJI: Record<string, string> = {
     zabita: '👮', guild: '⚔️', monopoly: '👑', ilan: '📋',
 };
 
+import NewsTicker from '@/components/NewsTicker';
+
 export default function HomePage() {
     const sim = useSimContext();
 
@@ -45,17 +47,7 @@ export default function HomePage() {
         <>
             <Navbar />
 
-            {/* NEWS TICKER */}
-            <div className="bg-nexus-primary border-b border-nexus-primary overflow-hidden py-1.5 whitespace-nowrap">
-                <div className="animate-marquee inline-flex gap-0">
-                    {[...sim.events.slice(0, 10), ...sim.events.slice(0, 10)].map((ev, i) => (
-                        <span key={`${ev.id}-${i}`} className="text-black font-terminal text-xl font-bold mx-6">
-                            {EVENT_TYPE_EMOJI[ev.type] || '📌'} {ev.headline}
-                            {i < 19 && <span className="mx-4 text-black/40">|</span>}
-                        </span>
-                    ))}
-                </div>
-            </div>
+            <NewsTicker events={sim.events} />
 
             <main className="flex-grow container mx-auto px-4 py-12 max-w-7xl">
                 {/* HERO SECTION */}
