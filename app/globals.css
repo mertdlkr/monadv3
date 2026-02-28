@@ -1,0 +1,144 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --nexus-bg: #0a0a1a;
+  --nexus-primary: #00ff88;
+  --nexus-accent: #ff6b35;
+  --nexus-gold: #ffd700;
+  --nexus-alert: #ff2d55;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: #0a0a1a;
+  color: #e0e0e0;
+  font-family: 'Inter', sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: rgba(0, 255, 136, 0.3);
+  color: #fff;
+}
+
+/* ---- Neon Utilities ---- */
+.neon-text {
+  text-shadow: 0 0 10px #00ff88, 0 0 20px #00ff88, 0 0 40px #00ff88;
+}
+
+.neon-glow-hover:hover {
+  text-shadow: 0 0 8px #00ff88, 0 0 16px #00ff88;
+  color: #00ff88;
+}
+
+.neon-border {
+  box-shadow: 0 0 10px rgba(0, 255, 136, 0.3), 0 0 20px rgba(0, 255, 136, 0.1);
+}
+
+/* ---- Scanline Overlay ---- */
+.scanline-overlay {
+  background-image: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%),
+    linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+  background-size: 100% 2px, 3px 100%;
+  pointer-events: none;
+}
+
+/* ---- Background Grid ---- */
+.bg-grid {
+  background-size: 40px 40px;
+  background-image: linear-gradient(to right, rgba(0, 255, 136, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 255, 136, 0.05) 1px, transparent 1px);
+}
+
+/* ---- Marquee Animation ---- */
+@keyframes marquee {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-marquee {
+  animation: marquee 25s linear infinite;
+}
+
+/* ---- Custom Scrollbar ---- */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #0a0a1a;
+}
+::-webkit-scrollbar-thumb {
+  background: #00ff88;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #00cc60;
+}
+
+/* ---- CRT Flicker ---- */
+@keyframes flicker {
+  0% { opacity: 0.97; }
+  100% { opacity: 1; }
+}
+.crt-flicker {
+  animation: flicker 0.15s infinite;
+}
+
+/* ---- Pixel Art Shadow (retro card effect) ---- */
+.pixel-shadow {
+  box-shadow: 4px 4px 0 0 #00ff88;
+}
+.pixel-shadow:hover {
+  box-shadow: 2px 2px 0 0 #00ff88;
+  transform: translate(2px, 2px);
+}
+
+/* ---- Gazette styles ---- */
+.vintage-border {
+  border-bottom: 3px double #c5a059;
+  border-top: 1px solid #2c1810;
+}
+.vintage-box-shadow {
+  box-shadow: 2px 2px 0px rgba(44, 24, 16, 0.1);
+}
+.drop-cap::first-letter {
+  float: left;
+  font-size: 3.5rem;
+  line-height: 3rem;
+  padding-right: 8px;
+  padding-left: 3px;
+  color: #2c1810;
+  font-weight: 900;
+}
+
+/* ---- Police Tape ---- */
+.police-tape {
+  background: repeating-linear-gradient(45deg, #fbbf24, #fbbf24 10px, #000 10px, #000 20px);
+}
+
+/* ---- Gold Glow ---- */
+.gold-glow {
+  box-shadow: 0 0 15px rgba(212, 175, 55, 0.15);
+}
+
+/* ---- Counter Animation ---- */
+@keyframes countUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.counter-animate {
+  animation: countUp 0.3s ease-out;
+}
