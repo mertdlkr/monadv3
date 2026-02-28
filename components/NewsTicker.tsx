@@ -39,9 +39,11 @@ export default function NewsTicker({ events }: NewsTickerProps) {
                 id: `bg-${dummyCounter}`,
                 headline: BACKGROUND_NEWS[dummyCounter % BACKGROUND_NEWS.length],
                 type: 'trade',
-                timestamp: 0,
+                timestamp: '0',
                 description: "",
-                agentIds: []
+                agentIds: [],
+                category: 'FLAŞ',
+                tick: 0
             });
             dummyCounter++;
         }
