@@ -133,7 +133,7 @@ export const ROLE_LABELS: Record<string, string> = {
 export const SHOP_LABELS: Record<string, string> = new Proxy({}, {
     get: (target, name) => {
         if (typeof name !== 'string') return '';
-        if (name === '-') return 'Gezgin / Yok';
+        if (name === '-') return 'Gezgin';
         return name;
     }
 });

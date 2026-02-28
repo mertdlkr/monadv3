@@ -47,7 +47,7 @@ export default function GazettePage() {
                     <div className="flex flex-col md:flex-row justify-between items-center border-b border-ink/20 pb-2">
                         <div className="text-sm font-bold tracking-widest uppercase text-ink/60">İstanbul, Türkiye</div>
                         <div className="flex items-center gap-4 text-sm font-bold tracking-widest text-ink/60">
-                            <span>12 Aralık 1923</span>
+                            <span>12 Aralık 2030</span>
                             <span className="w-1 h-1 bg-vtg-primary rounded-full"></span>
                             <span>Blok #{8932102 + sim.tick}</span>
                         </div>
@@ -241,7 +241,7 @@ export default function GazettePage() {
                         <span className="material-symbols-outlined">newspaper</span>
                         <span className="font-masthead font-bold text-lg">ÇARŞI GAZETESİ</span>
                     </div>
-                    <p className="text-ink/60 text-sm font-serif">© 1923 Çarşı A.Ş. Tüm hakları saklıdır. Yapay Zeka tarafından oluşturulmuştur.</p>
+                    <p className="text-ink/60 text-sm font-serif">© 2030 Çarşı A.Ş. Tüm hakları saklıdır. Yapay Zeka tarafından oluşturulmuştur.</p>
                     <div className="flex justify-center gap-6 text-sm font-bold text-ink/80 tracking-widest uppercase">
                         <span className="hover:text-vtg-primary cursor-pointer">Künye</span>
                         <span className="hover:text-vtg-primary cursor-pointer">Arşiv</span>

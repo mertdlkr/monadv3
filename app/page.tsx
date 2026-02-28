@@ -233,8 +233,10 @@ export default function HomePage() {
                                                 color: '#e0e0e0',
                                             }}
                                         />
+                                        <ReferenceLine y={0.28} stroke="#00ff88" strokeDasharray="5 5" label={{ value: 'DNM: 0.28', fill: '#00ff88', fontSize: 10, position: 'insideTopLeft' }} />
                                         <ReferenceLine y={0.41} stroke="#ffd700" strokeDasharray="5 5" label={{ value: 'TR: 0.41', fill: '#ffd700', fontSize: 10, position: 'insideTopLeft' }} />
                                         <ReferenceLine y={0.48} stroke="#ff6b35" strokeDasharray="5 5" label={{ value: 'ABD: 0.48', fill: '#ff6b35', fontSize: 10, position: 'insideTopLeft' }} />
+                                        <ReferenceLine y={0.63} stroke="#ff2d55" strokeDasharray="5 5" label={{ value: 'BRE: 0.63', fill: '#ff2d55', fontSize: 10, position: 'insideTopLeft' }} />
                                         <Line
                                             type="monotone"
                                             dataKey="gini"
